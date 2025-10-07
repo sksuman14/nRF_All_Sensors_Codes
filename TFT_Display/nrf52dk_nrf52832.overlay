@@ -1,0 +1,98 @@
+/ {
+	chosen {
+		zephyr,display = &st7735s_st7735s_128x160;
+	};
+};
+
+&spi1 {
+	compatible = "nordic,nrf-spi";
+	status = "okay";
+	cs-gpios = <&gpio0 22 GPIO_ACTIVE_LOW>; /* CS PIN AT P0.22 */
+	// cs-gpios = <&gpio0 5 GPIO_ACTIVE_LOW>;   //Enable Only When Configuring with Node
+
+	st7735s_st7735s_128x160: st7735r@0 {
+		compatible = "sitronix,st7735r";
+		spi-max-frequency = <20000000>;
+		reg = <0>;
+		cmd-data-gpios = <&arduino_header 15 GPIO_ACTIVE_LOW>;	/* A0 PIN AT P0.20 */
+		reset-gpios = <&arduino_header 14 GPIO_ACTIVE_LOW>;	/* RESET PIN AT P0.19 */
+		width = <128>;
+		height = <160>;
+		x-offset = <0>;
+		y-offset = <0>;
+		madctl = <0xc0>;
+		colmod = <0x55>;
+		caset = [00 00 00 4F];
+		raset = [00 00 00 9F];
+		vmctr1 = <0x0e>;
+		invctr = <0x07>;
+		pwctr1 = [a2 02 84];
+		pwctr2 = [c5];
+		pwctr3 = [0a 00];
+		pwctr4 = [8a 2a];
+		pwctr5 = [8a ee];
+		frmctr1 = [01 2c 2d];
+		frmctr2 = [01 2c 2d];
+		frmctr3 = [01 2c 2d 01 2c 2d];
+		gamctrp1 = [02 1c 07 12 37 32 29 2d 29 25 2b 39 00 01 03 10];
+		gamctrn1 = [03 1d 07 06 2e 2c 29 2d 2e 2e 37 3f 00 00 02 10];
+	};
+};
+
+&pinctrl {
+	spi2_default: spi2_default {
+		group1 {
+			psels = <NRF_PSEL(SPIM_SCK, 0, 25)>, /* SCK AT P0.25 */
+				<NRF_PSEL(SPIM_MOSI, 0, 23)>,  /*SDA AT P0.23 */
+				<NRF_PSEL(SPIM_MISO, 0, 24)>;
+		};
+	};
+
+	spi2_sleep: spi2_sleep {
+		group1 {
+			psels = <NRF_PSEL(SPIM_SCK, 0, 25)>,/* SCK AT P0.25 */
+				<NRF_PSEL(SPIM_MOSI, 0, 23)>, /*SDA AT P0.23 */
+				<NRF_PSEL(SPIM_MISO, 0, 24)>;
+			low-power-enable;
+		};
+	};
+};
+
+
+/* Enable for Node Configuration Only */
+
+// &pinctrl {
+//     uart0_default: uart0_default {
+//         group1 {
+//             psels = <NRF_PSEL(UART_TX, 0, 24)>, //6   for nrf52dk5832 
+//             <NRF_PSEL(UART_RX, 0, 23)>;   //8      for nrf52dk5832
+
+//         };
+//     };
+
+//     uart0_sleep: uart0_sleep {
+//         group1 {
+//             psels = <NRF_PSEL(UART_TX, 0, 24)>,    //6
+//             <NRF_PSEL(UART_RX, 0, 23)>;       //8
+
+//             low-power-enable;
+//         };
+//     };
+
+//     spi0_default: spi0_default {
+//         group1 {
+//             psels = <NRF_PSEL(SPIM_SCK, 0, 8)>,
+//                     <NRF_PSEL(SPIM_MOSI, 0, 7)>,
+//                     <NRF_PSEL(SPIM_MISO, 0, 6)>;
+//         };
+//     };
+
+//     spi0_sleep: spi0_sleep {
+//         group1 {
+//             psels = <NRF_PSEL(SPIM_SCK, 0, 8)>,
+//                     <NRF_PSEL(SPIM_MOSI, 0, 7)>,
+//                     <NRF_PSEL(SPIM_MISO, 0, 6)>;
+//             low-power-enable;
+//         };
+//     };
+// };

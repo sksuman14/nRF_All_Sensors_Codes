@@ -1,0 +1,27 @@
+&uart0 {
+  compatible = "nordic,nrf-uarte";
+  status = "okay";
+  label = "UART_0";
+  current-speed = < 9600 >;
+
+};
+// &pinctrl {
+// 	uart0_default: uart0_default {
+// 		group1 {
+// 			psels = <NRF_PSEL(UART_TX, 0, 24)>,
+// 				<NRF_PSEL(UART_RX, 0, 23)>,
+// 				<NRF_PSEL(UART_RTS, 0, 5)>,
+// 				<NRF_PSEL(UART_CTS, 0, 7)>;
+// 		};
+// 	};
+
+// 	uart0_sleep: uart0_sleep {
+// 		group1 {
+// 			psels = <NRF_PSEL(UART_TX, 0, 24)>,
+// 				<NRF_PSEL(UART_RX, 0, 23)>,
+// 				<NRF_PSEL(UART_RTS, 0, 5)>,
+// 				<NRF_PSEL(UART_CTS, 0, 7)>;
+// 			low-power-enable;
+// 		};
+// 	};
+// };

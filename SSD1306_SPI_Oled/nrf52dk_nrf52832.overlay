@@ -1,0 +1,21 @@
+&arduino_spi {
+        status = "okay";
+        cs-gpios = <&arduino_header 16 GPIO_ACTIVE_LOW>; /* D10 (CS) */
+        ssd1306_spi: ssd1306@0 {
+                compatible = "solomon,ssd1306fb";
+                reg = <0>;
+                label = "SSD1306";
+                spi-max-frequency = <8000000>; // SSD1306 can handle up to ~10MHz
+                width = <130>;
+                height = <64>;
+                segment-offset = <0>;
+                page-offset = <0>;
+                display-offset = <0>;
+                multiplex-ratio = <63>;
+                segment-remap;
+                com-invdir;
+                prechargep = <0x22>;
+                data_cmd-gpios = <&arduino_header 15 GPIO_ACTIVE_HIGH>; /* D9 (DC) */
+                reset-gpios = <&arduino_header 14 GPIO_ACTIVE_LOW>; /* D8 (RESET) */
+        };
+};

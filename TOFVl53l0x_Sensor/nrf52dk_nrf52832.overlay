@@ -1,0 +1,34 @@
+
+&pinctrl {
+    i2c0_default: i2c0_default {
+        group1 {
+
+            psels = <NRF_PSEL(TWIM_SDA, 0, 26)>,
+                    <NRF_PSEL(TWIM_SCL, 0, 27)>;
+        };
+    };
+
+    i2c0_sleep: i2c0_sleep {
+        group1 {
+
+            psels = <NRF_PSEL(TWIM_SDA, 0, 26)>,
+                    <NRF_PSEL(TWIM_SCL, 0, 27)>;
+            low-power-enable;
+        };
+    };
+
+};
+
+&i2c0 {
+    compatible = "nordic,nrf-twim";
+    status = "okay";
+    clock-frequency = <I2C_BITRATE_FAST>;
+    zephyr,concat-buf-size = <4096>;
+
+    vl53l0x: vl53l0x@29 {
+        compatible = "st,vl53l0x";
+        reg = <0x29>;
+        label = "VL53L3CX";
+    };
+
+};

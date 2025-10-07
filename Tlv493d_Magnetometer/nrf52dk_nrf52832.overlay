@@ -1,0 +1,13 @@
+&i2c0 {
+    compatible = "nordic,nrf-twim";
+    status = "okay";
+    clock-frequency = <I2C_BITRATE_STANDARD>;
+    
+    mysensor: mysensor@5e {
+        status = "okay";
+        compatible = "i2c-device";
+        reg = <0x5e>;
+        label = "TLV493D";
+
+    };
+};
