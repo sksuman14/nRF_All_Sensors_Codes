@@ -1,0 +1,6 @@
+&uart0 {
+  compatible = "nordic,nrf-uarte";
+  status = "okay";
+  label = "UART_0";
+  current-speed = < 9600 >;
+};

@@ -1,0 +1,18 @@
+/ {
+
+    aliases{
+        sw0 = &trigger_pin;
+		sw1 = &echo_pin;
+    };
+
+
+    buttons {
+		compatible = "gpio-keys";
+		trigger_pin: button_0 {
+			gpios = <&gpio0 2 (GPIO_PULL_UP | GPIO_ACTIVE_HIGH)>;
+		};
+		echo_pin: button_1 {
+			gpios = <&gpio0 3 (GPIO_PULL_UP | GPIO_ACTIVE_HIGH)>;
+		};
+	};
+};
