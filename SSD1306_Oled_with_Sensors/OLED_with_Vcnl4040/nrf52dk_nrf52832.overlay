@@ -1,0 +1,46 @@
+&arduino_i2c {
+	status = "okay";
+	compatible = "nordic,nrf-twi";
+
+	ssd1306_ssd1306_128x64_I2C: ssd1306@3c {
+		compatible = "solomon,ssd1306fb";
+		reg = <0x3c>;
+		label = "SSD1306";
+		width = <128>;
+		height = <64>;
+		segment-offset = <0>;
+		page-offset = <0>;
+		display-offset = <0>;
+		multiplex-ratio = <63>;
+		segment-remap;
+		com-invdir;
+		prechargep = <0x22>;
+	};
+
+	vcnl4040@60 {
+		status = "okay";
+		compatible = "vishay,vcnl4040";
+		reg = <0x60>;
+		led-current = <200>;
+		led-duty-cycle = <320>;
+	};
+};
+/* For Node Configuration only*/
+
+// &pinctrl {
+// 	i2c0_default: i2c0_default {
+// 		group1 {
+// 			psels = <NRF_PSEL(TWIM_SDA, 0, 26)>,  
+// 				<NRF_PSEL(TWIM_SCL, 0, 25)>;      
+// 		};
+// 	};
+
+// 	i2c0_sleep: i2c0_sleep {
+// 		group1 {
+// 			psels = <NRF_PSEL(TWIM_SDA, 0, 26)>,   
+// 				<NRF_PSEL(TWIM_SCL, 0, 25)>;        
+// 			low-power-enable;
+// 		};
+// 	};
+// };
+

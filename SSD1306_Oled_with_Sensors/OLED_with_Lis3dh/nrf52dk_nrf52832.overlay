@@ -1,0 +1,58 @@
+
+
+&pinctrl {
+	i2c0_default: i2c0_default {
+		group1 {
+			psels = <NRF_PSEL(TWIM_SDA, 0, 26)>,
+					<NRF_PSEL(TWIM_SCL, 0, 27)>;
+		};
+	};
+
+	i2c0_sleep: i2c0_sleep {
+		group1 {
+			psels = <NRF_PSEL(TWIM_SDA, 0, 26)>,
+					<NRF_PSEL(TWIM_SCL, 0, 27)>;
+			low-power-enable;
+		};
+	};
+
+};
+
+&i2c0 {
+	compatible = "nordic,nrf-twim";
+	status = "okay";
+
+	clock-frequency = <I2C_BITRATE_STANDARD>;
+
+	lis2dh@19 {
+        status = "okay";
+        compatible = "st,lis2dh";
+        reg = <0x19>;
+       
+        label = "LIS2DH";
+        
+    };
+};
+
+
+////////////////////////////////////////////////
+
+&arduino_i2c {
+    status = "okay";
+    compatible = "nordic,nrf-twi";
+    
+	ssd1306_ssd1306_128x64_I2C: ssd1306@3c {
+        compatible = "solomon,ssd1306fb";
+		reg = <0x3c>;
+        label = "SSD1306";
+		width = <130>;
+		height = <64>;
+		segment-offset = <0>;
+		page-offset = <0>;
+		display-offset = <0>;
+		multiplex-ratio = <63>;
+		segment-remap;
+		com-invdir;
+		prechargep = <0x22>;
+	};
+};
