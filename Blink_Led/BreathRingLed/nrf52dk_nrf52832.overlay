@@ -1,0 +1,64 @@
+#include <zephyr/dt-bindings/led/led.h>
+&pinctrl {
+    i2s0DefaultAlt: i2s0_default_alt {  
+        group1 {
+            /* Default I2S config for the nRF5340, P1.13 is the output */
+            psels = <NRF_PSEL(I2S_SCK_M, 0, 23)>,
+                    <NRF_PSEL(I2S_LRCK_M, 0, 22)>,
+                    <NRF_PSEL(I2S_SDOUT, 0, 25)>,    // Output pin for I2S data
+                    <NRF_PSEL(I2S_SDIN, 0, 24)>;     // Input pin for I2S data
+        };
+    };
+};
+
+i2sLed: &i2s0 {  // Renamed to camelCase
+    status = "okay";
+    pinctrl-0 = <&i2s0DefaultAlt>;  
+    pinctrl-names = "default";
+};
+
+/{
+    ledstrip: ws2812 {  // Renamed to camelCase
+        compatible = "worldsemi,ws2812-i2s";
+
+        i2s-dev = <&i2sLed>; 
+        chain-length = <24>;  // Number of LEDs in the strip (adjust as needed)
+        color-mapping = <LED_COLOR_ID_GREEN
+                         LED_COLOR_ID_RED
+                         LED_COLOR_ID_BLUE>;
+        reset-delay = <500>;
+    };
+
+    aliases {
+        ledstrip = &ledstrip;  // Updated alias to camelCase
+    };
+};
+
+/* Enable For Node Configuration Only */
+// &pinctrl {
+//     uart0Default: uart0_default {  
+//         group1 {
+//             psels = <NRF_PSEL(UART_TX, 0, 24)>, // TX pin for UART
+//                     <NRF_PSEL(UART_RX, 0, 23)>, // RX pin for UART
+//                     <NRF_PSEL(UART_RTS, 0, 5)>,  // RTS pin for UART
+//                     <NRF_PSEL(UART_CTS, 0, 7)>;  // CTS pin for UART
+//         };
+//     };
+
+//     uart0Sleep: uart0_sleep {  
+//         group1 {
+//             psels = <NRF_PSEL(UART_TX, 0, 24)>,    // TX pin for UART
+//                     <NRF_PSEL(UART_RX, 0, 23)>,    // RX pin for UART
+//                     <NRF_PSEL(UART_RTS, 0, 5)>,    // RTS pin for UART
+//                     <NRF_PSEL(UART_CTS, 0, 7)>;    // CTS pin for UART
+//             low-power-enable;
+//         };
+//     };
+// };
+
+// &uart0 {
+//     status = "okay";
+// };
+
+
+
