@@ -1,0 +1,72 @@
+#include <zephyr/dt-bindings/led/led.h>
+
+/ {
+	model = "Nordic nRF52833 DK NRF52833";
+    compatible = "nordic,nrf52833-dk-nrf52833";
+
+	chosen {
+		zephyr,console = &uart0;
+		zephyr,shell-uart = &uart0;
+		zephyr,uart-mcumgr = &uart0;
+		zephyr,bt-mon-uart = &uart0;
+		zephyr,bt-c2h-uart = &uart0;
+		zephyr,sram = &sram0;
+		zephyr,flash = &flash0;
+		zephyr,code-partition = &slot0_partition;
+	};
+
+	leds {
+		compatible = "gpio-leds";
+		led0: led_0 {
+			gpios = <&gpio0 4 GPIO_ACTIVE_LOW>;
+			label = "Green LED 0";
+		};
+		led1: led_1 {
+			gpios = <&gpio0 5 GPIO_ACTIVE_LOW>;
+			label = "Green LED 1";
+		};
+		led2: led_2 {
+			gpios = <&gpio0 9 GPIO_ACTIVE_LOW>;
+			label = "Green LED 2";
+		};
+		led3: led_3 {
+			gpios = <&gpio0 29 GPIO_ACTIVE_LOW>;
+			label = "Green LED 3";
+		};
+	};
+};
+&pinctrl {
+
+    i2s0_default_alt: i2s0_default_alt {
+        group1 {
+            /* Default I2S config for the nRF52832, P0.23 is the output */
+            psels = <NRF_PSEL(I2S_SCK_M, 0, 25)>,
+                    <NRF_PSEL(I2S_LRCK_M, 0, 22)>,
+                    <NRF_PSEL(I2S_SDOUT, 0, 23)>,                                      
+                    <NRF_PSEL(I2S_SDIN, 0, 24)>;
+        };
+    };
+};
+
+i2s_led: &i2s0 {
+    status = "okay";
+    pinctrl-0 = <&i2s0_default_alt>;
+    pinctrl-names = "default";
+};
+
+/ {
+    led_strip: ws2812 {
+        compatible = "worldsemi,ws2812-i2s";
+
+        i2s-dev = <&i2s_led>;
+        chain-length = <32>; /* arbitrary; change at will */
+        color-mapping = <LED_COLOR_ID_GREEN
+        LED_COLOR_ID_RED
+        LED_COLOR_ID_BLUE>;
+        reset-delay = <500>;
+    };
+
+    aliases {
+        led-strip = &led_strip;
+    };
+};
