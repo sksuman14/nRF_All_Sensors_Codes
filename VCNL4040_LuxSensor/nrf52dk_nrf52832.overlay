@@ -1,13 +1,14 @@
 &i2c0 {
-	status = "okay";
-	clock-frequency = <I2C_BITRATE_FAST>;
-	vcnl4040@60 {
-		status = "okay";
-		compatible = "vishay,vcnl4040";
-		reg = <0x60>;
-		led-current = <200>;
-		led-duty-cycle = <320>;
-	};
+    compatible = "nordic,nrf-twim"; // Ensure this matches the I2C peripheral on your Nordic SoC
+    status = "okay";
+    clock-frequency = <I2C_BITRATE_STANDARD>; // Set the I2C bus speed to standard rate (100 kHz)
+
+    vcnl4040@60 {  // Node for the VCNL4040 sensor with I2C address 0x60
+        compatible = "vishay,vcnl4040"; // VCNL4040 sensor compatible string
+        reg = <0x60>;                   // I2C address of the VCNL4040 sensor
+        label = "VCNL4040";                // Optional label for the sensor
+        status = "okay";                // Enable the sensor
+    };
 };
 
 // /* For node Configuration only */
