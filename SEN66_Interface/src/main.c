@@ -18,13 +18,13 @@ void send_command(uint16_t cmd)
     uint8_t buf[2];
     buf[0] = (cmd >> 8);
     buf[1] = cmd & 0xFF;
-    
-     i2c_write_dt(&dev_i2c, buf, sizeof(buf));
+
+    i2c_write_dt(&dev_i2c, buf, sizeof(buf));
 }
 
 void read_data(uint16_t *output, uint8_t data_size)
 {
-    uint8_t data_array[27]; 
+    uint8_t data_array[27];
 
     i2c_read_dt(&dev_i2c, data_array, sizeof(data_array));
 
@@ -38,14 +38,23 @@ void read_data(uint16_t *output, uint8_t data_size)
 
 void fan_cleaning()
 {
-    send_command(0x0104); 
-    k_msleep(1400);
 
-    send_command(0x5607); 
-    k_sleep(K_SECONDS(10));
+    send_command(0x0104);
+    k_msleep(10);
 
-    send_command(CMD_START_MEAS); 
-    k_msleep(2000);
+    send_command(0x5607);
+    k_msleep(10);
+
+    send_command(CMD_START_MEAS);
+    k_msleep(10);
+
+    /* ---Status --- */
+    for (int i = 0; i <= 100; i++)
+    {
+        printk("\rWaiting for Fan cleaning: %3d%%", i);
+        k_msleep(80);
+    }
+    printk("\n");
 
     printk("Fan cleaning done, resumed measurements\n");
 }
@@ -58,15 +67,16 @@ int main(void)
         return -1;
     }
 
-    printk("Sensor is working..\n");
-    printk("Waiting for Fan cleaning...\n");
+    printk("\n=== Sensor Status ===\n");
+    printk("Sensor is working\n");
+    printk("Fan cleaning will take 10 seconds...\n");
 
     /* --- Initialization --- */
     send_command(CMD_RESET);
-    k_msleep(1200);
+    k_msleep(10);
 
     send_command(CMD_START_MEAS);
-    k_msleep(2000);
+    k_msleep(10);
 
     fan_cleaning();
 
@@ -104,11 +114,11 @@ int main(void)
         last_read_time = k_uptime_get_32();
 
         /* --- Convert Data --- */
-        float pm1  = output[0] / 10.0f;
+        float pm1 = output[0] / 10.0f;
         float pm25 = output[1] / 10.0f;
-        float pm4  = output[2] / 10.0f;
+        float pm4 = output[2] / 10.0f;
         float pm10 = output[3] / 10.0f;
-        float rh   = (int16_t)output[4] / 100.0f;
+        float rh = (int16_t)output[4] / 100.0f;
         float temp = (int16_t)output[5] / 200.0f;
         int16_t voc = (int16_t)output[6] / 10;
         int16_t nox = (int16_t)output[7] / 10;
@@ -120,9 +130,6 @@ int main(void)
         printk("RH: %.2f %% | Temp: %.2f °C\n", rh, temp);
         printk("VOC: %d | NOx: %d\n", voc, nox);
         printk("CO2: %d ppm\n\n", CO2);
-
-        /* --- Fixed delay (1 second) --- */
-        k_msleep(1000);
     }
 
     return 0;
